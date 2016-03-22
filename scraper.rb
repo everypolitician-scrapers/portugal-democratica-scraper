@@ -7,11 +7,11 @@ require 'date'
 require 'open-uri'
 require 'date'
 
-# require 'colorize'
-# require 'pry'
-# require 'csv'
-# require 'open-uri/cached'
-# OpenURI::Cache.cache_path = '.cache'
+require 'colorize'
+require 'pry'
+require 'csv'
+require 'open-uri/cached'
+OpenURI::Cache.cache_path = '.cache'
 
 def noko(url)
   Nokogiri::HTML(open(url).read) 
@@ -38,12 +38,13 @@ page.css('ul.mp-list li').each do |entry|
     full_name: mp.xpath('//li[@class="single-field" and .//p[contains(.,"complet")]]/h5').text.strip,
     photo: mp.css('p.mp-photo img/@src').text,
     email: mp.css('ul.mp-details a[href^=mailto]/@href').text.gsub('mailto:',''),
-    website: mp.css('ul.mp-details a[@href*="parlamento.pt/DeputadoGP/Paginas/Biografia"]/@href').text,
+    official_website: mp.css('ul.mp-details a[@href*="parlamento.pt/DeputadoGP/Paginas/Biografia"]/@href').text,
     wikipedia: mp.css('ul.mp-details a[@href*="wikipedia.org"]/@href').text,
     twitter: mp.css('ul.mp-details a[@href*="twitter.com"]/@href').text,
     source: mp_url
   }
   mp_data[:photo].prepend @BASE unless mp_data[:photo].nil? or mp_data[:photo].empty?
+  mp_data[:identifier__parlamento] = mp_data[:official_website][/BID=(\d+)/, 1]
 
   mandatos = mp.xpath('//h4[contains(.,"Mandatos")]/../ul/li/text()')
   mandatos.each do |m|
