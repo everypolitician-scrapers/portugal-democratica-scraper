@@ -54,11 +54,7 @@ page.css('ul.mp-list li').each do |entry|
     (area, start_date, end_date) = con_and_date.match(/(.*) \(de (.*) a (.*)\)/).captures
     term_data = {
       id: termname[/^(\d+)/,1],
-      name: termname,
-      start_date: start_date,
-      end_date: end_date,
     }
-    ScraperWiki.save_sqlite([:id], term_data, 'terms')
 
     data = mp_data.merge({
       term: term_data[:id],
