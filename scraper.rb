@@ -61,7 +61,7 @@ page.css('ul.mp-list li').each do |entry|
       party: party,
       area: area,
     })
-    ScraperWiki.save_sqlite([:name, :term], data)
+    ScraperWiki.save_sqlite([:id, :term], data)
     added[term_data[:id]] += 1
   end
 
